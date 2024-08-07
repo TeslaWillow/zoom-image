@@ -1,31 +1,23 @@
-// Inicializar ElevateZoom
-$("#zoom-image").ezPlus({
-    tint: true,
-    tintColour: '#F90',
-    tintOpacity: 0.5
+import PhotoSwipeLightbox from 'https://unpkg.com/photoswipe/dist/photoswipe-lightbox.esm.js';
+
+// Verificar si el dispositivo es de escritorio
+function isDesktop() {
+    return window.innerWidth >= 992; // Puedes ajustar el ancho según tus necesidades
+}
+
+// Inicializar ElevateZoom solo en dispositivos de escritorio
+if (isDesktop()) {
+    $(".zoomable-image").ezPlus({
+        tint: true,
+        tintColour: '#F90',
+        tintOpacity: 0.5
+    });
+}
+
+const lightbox = new PhotoSwipeLightbox({
+  gallery: '#zoom-galery',
+  children: 'a',
+  pswpModule: () => import('https://unpkg.com/photoswipe'),
 });
 
-// Inicializar Hammer.js
-const imageElement = document.getElementById('zoom-image');
-const hammer = new Hammer(imageElement);
-
-// Configurar eventos de pinch
-hammer.get('pinch').set({ enable: true });
-
-let currentScale = 1;
-const ez = $('#zoom-image').data('elevateZoom');
-
-hammer.on('pinchstart', function() {
-    currentScale = ez.currentZoomLevel;
-});
-
-hammer.on('pinch', function(ev) {
-    const scale = currentScale * ev.scale;
-    ez.changeState('enable');
-    ez.zoomLevel = scale;
-    ez.zoom();
-});
-
-hammer.on('pinchend', function() {
-    ez.changeState('disable');
-});
+lightbox.init();
